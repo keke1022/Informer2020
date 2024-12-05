@@ -4,7 +4,24 @@
 
 ```git clone https://github.com/zhouhaoyi/ETDataset.git```
 
+## Data Cleaning
+
+To clean the data, use:
+
+```python data_cleaning.py --input <raw data> --output <cleaned data>```
+
+## Metrics
+
+To run the data, use:
+
+```python main_informer.py <flags>```
+
+Or use:
+
+```./run_informer_experiments.sh```
+
 # Cite From: 
+
 # Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting (AAAI'21 Best Paper)
 ![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg?style=plastic)
 ![PyTorch 1.2](https://img.shields.io/badge/PyTorch%20-%23EE4C2C.svg?style=plastic)
