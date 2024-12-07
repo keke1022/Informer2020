@@ -5,18 +5,17 @@ import pandas as pd
 import numpy as np
 
 from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 
 # Define a simple LSTM model
 class LSTMModel(nn.Module):
-    def __init__(self, feature_size, hidden_size, num_layers, pred_len, seq_len):
+    def __init__(self, input_size, output_size, hidden_size, num_layers, pred_len, seq_len):
         super(LSTMModel, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(feature_size, hidden_size, num_layers, batch_first=True)
-        self.fc = nn.Linear(hidden_size, feature_size)
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
         self.pred = nn.Linear(seq_len, pred_len)
 
     def forward(self, x):
@@ -30,17 +29,40 @@ class LSTMModel(nn.Module):
 
 if __name__ == "__main__":
     data = pd.read_csv(
-        "./data_cleaned/ETTh1.csv", parse_dates=["date"], index_col="date"
+        "./data_cleaned/apple_stock_sentiment.csv"
     )
-
+    data = data.drop(columns=[data.columns[0]])
+    scaler = StandardScaler()
+    data = scaler.fit_transform(data)
     # Function to create sequences for forecasting
-    def create_sequences(data, seq_length, pred_len):
+    def create_train(data, seq_length, pred_len, target = None):
         xs, ys = [], []
-        for i in range(len(data) - seq_length - pred_len):
+        for i in list(range(0, len(data) - seq_length - pred_len, 64)):
             x = data[i : i + seq_length, :]  # Input sequence
-            y = data[
-                i + seq_length : i + seq_length + pred_len, :
-            ]  # Target sequence (pred_len steps ahead)
+            if target is None:
+                y = data[
+                    i + seq_length : i + seq_length + pred_len, :
+                ]  # Target sequence (pred_len steps ahead)
+            else:
+                y = data[
+                    i + seq_length : i + seq_length + pred_len, target
+                ]  # Target sequence (pred_len steps ahead)
+            xs.append(x)
+            ys.append(y)
+        return np.array(xs), np.array(ys)
+
+    def create_test(data, seq_length, pred_len, target=None):
+        xs, ys = [], []
+        for i in list(range(0, len(data) - seq_length - pred_len, 1)):
+            x = data[i : i + seq_length, :]  # Input sequence
+            if target is None:
+                y = data[
+                    i + seq_length : i + seq_length + pred_len, :
+                ]  # Target sequence (pred_len steps ahead)
+            else:
+                y = data[
+                    i + seq_length : i + seq_length + pred_len, target
+                ]  # Target sequence (pred_len steps ahead)
             xs.append(x)
             ys.append(y)
         return np.array(xs), np.array(ys)
@@ -50,11 +72,8 @@ if __name__ == "__main__":
     PRED_LEN = 24  # Number of future steps to forecast
 
     # Create sequences
-    X, y = create_sequences(data.values, SEQ_LENGTH, PRED_LEN)
-    # Split data into training and test sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=498
-    )
+    X_train, y_train = create_train(data, SEQ_LENGTH, PRED_LEN, target = 0)
+    X_test, y_test = create_test(data, SEQ_LENGTH, PRED_LEN, target=0)
     # Convert data to PyTorch tensors
     X_train, y_train = torch.tensor(X_train, dtype=torch.float32), torch.tensor(
         y_train, dtype=torch.float32
@@ -62,16 +81,19 @@ if __name__ == "__main__":
     X_test, y_test = torch.tensor(X_test, dtype=torch.float32), torch.tensor(
         y_test, dtype=torch.float32
     )
+    y_train = y_train.reshape([y_train.shape[0], y_train.shape[1], -1])
+    y_test = y_test.reshape([y_test.shape[0], y_test.shape[1], -1])
     # Create DataLoaders
     train_dataset = TensorDataset(X_train, y_train)
     test_dataset = TensorDataset(X_test, y_test)
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False)
 
-    feature_size = 7
-    hidden_size = 100
+    input_size = data.shape[1]
+    output_size = 1
+    hidden_size = 32
     num_layers = 3
-    model = LSTMModel(feature_size, hidden_size, num_layers, PRED_LEN, SEQ_LENGTH)
+    model = LSTMModel(input_size, output_size, hidden_size, num_layers, PRED_LEN, SEQ_LENGTH)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
@@ -91,6 +113,7 @@ if __name__ == "__main__":
 
                 # Forward pass
                 outputs = model(inputs)
+                # print(outputs.shape)
                 loss = criterion(outputs, targets)
                 total_loss += loss.item()
                 # Backward pass and optimization
@@ -101,7 +124,7 @@ if __name__ == "__main__":
                 return
             print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {total_loss:.4f}")
 
-    train_model(model, train_loader, criterion, optimizer, num_epochs=100)
+    train_model(model, train_loader, criterion, optimizer, num_epochs=1000)
 
     # Define the evaluation function
     def evaluate_model(model, test_loader, criterion):
@@ -111,6 +134,7 @@ if __name__ == "__main__":
             for inputs, targets in test_loader:
                 inputs, targets = inputs.to(device), targets.permute(0, 2, 1).to(device)
                 outputs = model(inputs)
+                # print(outputs.shape)
                 loss = criterion(outputs, targets)
                 total_loss += loss.item() * inputs.size(0)  # Aggregate the loss
 
@@ -118,5 +142,7 @@ if __name__ == "__main__":
         return average_loss
 
     # Compute the test loss
-    test_loss = evaluate_model(model, test_loader, criterion)
-    print(f"Test Loss: {test_loss:.4f}")
+    mse = evaluate_model(model, test_loader, criterion)
+    mae = evaluate_model(model, test_loader, nn.L1Loss())
+    print(f"MSE: {mse:.4f}")
+    print(f"MAE: {mae:.4f}")
