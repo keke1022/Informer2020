@@ -214,7 +214,9 @@ class Exp_Informer(Exp_Basic):
         print('test shape:', preds.shape, trues.shape)
 
         # result save
-        folder_path = './results/' + setting +'/'
+        import datetime
+        current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        folder_path = './results/' + setting + current_time + '/'
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
