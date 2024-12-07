@@ -2,3 +2,5 @@ __pycache__/
 env/
 ETDataset/
 results/
+checkpoints/
+saved_models/
