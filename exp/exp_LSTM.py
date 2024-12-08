@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # Function to create sequences for forecasting
     def create_train(data, seq_length, pred_len, target = None):
         xs, ys = [], []
-        for i in list(range(0, len(data) - seq_length - pred_len, 64)):
+        for i in list(range(0, len(data) - seq_length - pred_len, 32)):
             x = data[i : i + seq_length, :]  # Input sequence
             if target is None:
                 y = data[
@@ -68,8 +68,8 @@ if __name__ == "__main__":
         return np.array(xs), np.array(ys)
 
     # Parameters
-    SEQ_LENGTH = 96  # Length of the input sequence
-    PRED_LEN = 24  # Number of future steps to forecast
+    SEQ_LENGTH = 48  # Length of the input sequence
+    PRED_LEN = 14  # Number of future steps to forecast
 
     # Create sequences
     X_train, y_train = create_train(data, SEQ_LENGTH, PRED_LEN, target = 0)
