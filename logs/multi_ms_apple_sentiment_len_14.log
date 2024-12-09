@@ -1,0 +1,70 @@
+Args in experiment:
+Namespace(model='informer', data='custom', root_path='/root/repo/Informer2020/data_cleaned', data_path='apple_stock_sentiment.csv', features='MS', target='Apple_Price', freq='b', checkpoints='./checkpoints/', seq_len=48, label_len=48, pred_len=14, enc_in=3, dec_in=3, c_out=1, d_model=512, n_heads=8, e_layers=4, d_layers=2, s_layers=[3, 2, 1], d_ff=2048, factor=5, padding=0, distil=True, dropout=0.05, attn='prob', embed='timeF', activation='gelu', output_attention=False, do_predict=False, mix=True, cols=None, num_workers=0, itr=2, train_epochs=20, batch_size=32, patience=3, learning_rate=0.0001, des='test', loss='mse', lradj='type1', use_amp=False, inverse=False, use_gpu=True, gpu=0, use_multi_gpu=False, devices='0,1,2,3', detail_freq='b')
+Use GPU: cuda:0
+>>>>>>>start training : informer_custom_ftMS_sl48_ll48_pl14_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 852
+val 118
+test 248
+Epoch: 1 cost time: 1.3561272621154785
+Epoch: 1, Steps: 26 | Train Loss: 0.4817284 Vali Loss: 0.1384921 Test Loss: 0.3292629
+Validation loss decreased (inf --> 0.138492).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 2 cost time: 0.797074556350708
+Epoch: 2, Steps: 26 | Train Loss: 0.0782248 Vali Loss: 0.1200105 Test Loss: 0.2491239
+Validation loss decreased (0.138492 --> 0.120010).  Saving model ...
+Updating learning rate to 5e-05
+Epoch: 3 cost time: 0.8328125476837158
+Epoch: 3, Steps: 26 | Train Loss: 0.0459359 Vali Loss: 0.0855019 Test Loss: 0.2802293
+Validation loss decreased (0.120010 --> 0.085502).  Saving model ...
+Updating learning rate to 2.5e-05
+Epoch: 4 cost time: 0.8818931579589844
+Epoch: 4, Steps: 26 | Train Loss: 0.0440581 Vali Loss: 0.1430821 Test Loss: 0.1396943
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 1.25e-05
+Epoch: 5 cost time: 0.881148099899292
+Epoch: 5, Steps: 26 | Train Loss: 0.0392753 Vali Loss: 0.1184417 Test Loss: 0.1652344
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 6.25e-06
+Epoch: 6 cost time: 0.8471717834472656
+Epoch: 6, Steps: 26 | Train Loss: 0.0398624 Vali Loss: 0.1627534 Test Loss: 0.1064734
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : informer_custom_ftMS_sl48_ll48_pl14_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 248
+test shape: (7, 32, 14, 1) (7, 32, 14, 1)
+test shape: (224, 14, 1) (224, 14, 1)
+mse:0.279672771692276, mae:0.49372598528862
+Use GPU: cuda:0
+>>>>>>>start training : informer_custom_ftMS_sl48_ll48_pl14_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_1>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 852
+val 118
+test 248
+Epoch: 1 cost time: 0.8632297515869141
+Epoch: 1, Steps: 26 | Train Loss: 0.5497138 Vali Loss: 0.1282530 Test Loss: 0.7587909
+Validation loss decreased (inf --> 0.128253).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 2 cost time: 0.8906219005584717
+Epoch: 2, Steps: 26 | Train Loss: 0.0877571 Vali Loss: 0.2063025 Test Loss: 0.1591225
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 5e-05
+Epoch: 3 cost time: 0.9142343997955322
+Epoch: 3, Steps: 26 | Train Loss: 0.0453387 Vali Loss: 0.1210309 Test Loss: 0.1800974
+Validation loss decreased (0.128253 --> 0.121031).  Saving model ...
+Updating learning rate to 2.5e-05
+Epoch: 4 cost time: 0.9127333164215088
+Epoch: 4, Steps: 26 | Train Loss: 0.0431857 Vali Loss: 0.1528071 Test Loss: 0.1247010
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 1.25e-05
+Epoch: 5 cost time: 0.9175324440002441
+Epoch: 5, Steps: 26 | Train Loss: 0.0428275 Vali Loss: 0.1243684 Test Loss: 0.1596915
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 6.25e-06
+Epoch: 6 cost time: 0.8888137340545654
+Epoch: 6, Steps: 26 | Train Loss: 0.0389601 Vali Loss: 0.1234254 Test Loss: 0.1592123
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : informer_custom_ftMS_sl48_ll48_pl14_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 248
+test shape: (7, 32, 14, 1) (7, 32, 14, 1)
+test shape: (224, 14, 1) (224, 14, 1)
+mse:0.17844606935977936, mae:0.37445464730262756

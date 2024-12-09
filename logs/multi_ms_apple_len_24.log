@@ -1,0 +1,54 @@
+Args in experiment:
+Namespace(model='informer', data='custom', root_path='/root/repo/Informer2020/data_cleaned', data_path='apple_stock.csv', features='MS', target='Apple_Price', freq='b', checkpoints='./checkpoints/', seq_len=96, label_len=48, pred_len=24, enc_in=2, dec_in=2, c_out=1, d_model=512, n_heads=8, e_layers=4, d_layers=2, s_layers=[3, 2, 1], d_ff=2048, factor=5, padding=0, distil=True, dropout=0.05, attn='prob', embed='timeF', activation='gelu', output_attention=False, do_predict=False, mix=True, cols=None, num_workers=0, itr=2, train_epochs=20, batch_size=32, patience=3, learning_rate=0.0001, des='test', loss='mse', lradj='type1', use_amp=False, inverse=False, use_gpu=True, gpu=0, use_multi_gpu=False, devices='0,1,2,3', detail_freq='b')
+Use GPU: cuda:0
+>>>>>>>start training : informer_custom_ftMS_sl96_ll48_pl24_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 794
+val 108
+test 238
+Epoch: 1 cost time: 1.4675781726837158
+Epoch: 1, Steps: 24 | Train Loss: 0.4560297 Vali Loss: 0.1779256 Test Loss: 0.2170421
+Validation loss decreased (inf --> 0.177926).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 2 cost time: 0.8431522846221924
+Epoch: 2, Steps: 24 | Train Loss: 0.0868252 Vali Loss: 0.1998625 Test Loss: 0.1619279
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 5e-05
+Epoch: 3 cost time: 0.8451828956604004
+Epoch: 3, Steps: 24 | Train Loss: 0.0657376 Vali Loss: 0.2735083 Test Loss: 0.1367742
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 2.5e-05
+Epoch: 4 cost time: 0.8207511901855469
+Epoch: 4, Steps: 24 | Train Loss: 0.0497911 Vali Loss: 0.2324304 Test Loss: 0.1700158
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : informer_custom_ftMS_sl96_ll48_pl24_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 238
+test shape: (7, 32, 24, 1) (7, 32, 24, 1)
+test shape: (224, 24, 1) (224, 24, 1)
+mse:0.2179054468870163, mae:0.3986656963825226
+Use GPU: cuda:0
+>>>>>>>start training : informer_custom_ftMS_sl96_ll48_pl24_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_1>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 794
+val 108
+test 238
+Epoch: 1 cost time: 0.8352141380310059
+Epoch: 1, Steps: 24 | Train Loss: 0.3406390 Vali Loss: 0.1503425 Test Loss: 0.2507519
+Validation loss decreased (inf --> 0.150342).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 2 cost time: 0.8410196304321289
+Epoch: 2, Steps: 24 | Train Loss: 0.0849004 Vali Loss: 0.1609005 Test Loss: 0.1656593
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 5e-05
+Epoch: 3 cost time: 0.8481853008270264
+Epoch: 3, Steps: 24 | Train Loss: 0.0722091 Vali Loss: 0.1510724 Test Loss: 0.2047445
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 2.5e-05
+Epoch: 4 cost time: 0.8350849151611328
+Epoch: 4, Steps: 24 | Train Loss: 0.0580831 Vali Loss: 0.2397193 Test Loss: 0.1318244
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : informer_custom_ftMS_sl96_ll48_pl24_dm512_nh8_el4_dl2_df2048_atprob_fc5_ebtimeF_dtTrue_mxTrue_test_1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 238
+test shape: (7, 32, 24, 1) (7, 32, 24, 1)
+test shape: (224, 24, 1) (224, 24, 1)
+mse:0.25219759345054626, mae:0.4427884519100189
